@@ -1,0 +1,16 @@
+{
+  "name": "ssupago", 
+  "version": "1.0",
+  "description": "Improve your will.",
+  "manifest_version": 2,
+  "browser_action":{
+      "default_icon":"icon.png",
+      "default_popup":"popup.html"
+  },
+  "permissions": [
+    "background",
+    "tabs",
+    "https://*/*",
+    "http://*/*"
+    ]
+}
