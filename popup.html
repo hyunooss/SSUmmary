@@ -4,10 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        .menu { width:130px; }
+        .menu { width:200px; }
         .menu button { width:100%; }
+        #result { 
+            resize: none; 
+            width: 97%; 
+            height: 100px;
+        }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="jquery.js"></script>
     <script src="popup.js"></script>
 </head>
 
@@ -16,6 +21,7 @@
 <div class="menu">
     <button id="btn1">번역요약</button>
     <!-- <button id="youtube">유튜브 다운로드</button> -->
+    <textarea id="result" disabled></textarea>
 </div>
 
 </body>
