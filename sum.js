@@ -40,8 +40,11 @@ sumz3_url = "https://summariz3.herokuapp.com/";
 // send text to server and get result
 $.ajax({
     type: 'POST',
-    url: "http://localhost:8000/ssupago/",
+    url: "http://127.0.0.1:8000/ssupago/",
     data: { content: text },
+    Headers: {
+        'Access-Control-Allow-Origin': '*',
+    },
     success: function(data, status){
         console.log(data);
     }
