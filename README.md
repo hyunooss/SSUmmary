@@ -6,7 +6,7 @@
 
 ## Dependency
 + **django-server** 
-  > pip install django django-cors-headers selenium
+  > pip install django django-cors-headers selenium webdriver_manager
 
 ## Architecture
 <img src="https://user-images.githubusercontent.com/62216628/154456823-c341f5a9-5be8-4321-8d60-bf0b253eea40.png" width="70%" align="center">
