@@ -19,6 +19,7 @@ function bnt1_fn() {
         chrome.storage.sync.set({'result': result[0]});
     });
 
+    // set url to storage
     chrome.tabs.executeScript({ 
         code: "chrome.storage.sync.set({'url': document.location.href});"
     });
@@ -32,23 +33,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // get result from storage
     chrome.storage.sync.get(function (data) {
-        let result = data.result ? data.result : "";
-
-        chrome.tabs.executeScript({ 
-            code: "chrome.storage.sync.get(function (data) { \
-                let url = data.url ? data.url : ''; \
-                return url; \
-            });"
-        });
-            
-        let textarea = document.getElementById('result')
-        textarea.innerText = data.url + "\n" +  document.location.href;
-
         // if url is not same, then clear result
-        if (data.url !== document.location.href) {
-            result = "";
-        }
-
-        // document.getElementById('result').innerText = result;
+        chrome.tabs.executeScript({ 
+            code: "document.location.href;"
+        }, function (current_url) {
+            document.getElementById('result').innerText = data.result;
+            if (data.url != current_url) {
+                document.getElementById('result').innerText = "";
+            }
+        });
     });
 });
