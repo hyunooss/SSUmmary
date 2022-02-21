@@ -12,6 +12,8 @@ ret = "";
 result.split('\n').forEach(function(line) {
     if (line.length > 50) { ret += line; }
 });
+result.replace('。', '.');
+result.replace('、', '.');
 result = ret.slice(0, 5000);
 
 
