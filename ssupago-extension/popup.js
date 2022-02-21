@@ -25,7 +25,6 @@ function bnt1_fn() {
         myInterval = setInterval(myTimer, 100);
     });
     
-
     // sum.js code
     chrome.tabs.executeScript({ 
         file: 'sum.js', 
