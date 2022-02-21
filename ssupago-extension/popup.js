@@ -1,36 +1,28 @@
 'use strict';
 
-var cur = 0;
-function myTimer() {
-    // const d = new Date();
-    document.getElementById("probar").value = cur;
-    cur ++;
-}
-
-function end_time(){
-    clearTimeout(myTimer);
-}
-
+var myInterval;
 
 function bnt1_fn() {
     // jquery code
     chrome.tabs.executeScript({
         file: 'jquery.js',
-    }, function(result) { 
-        // document.getElementById('result').innerText = "요약중...";
     });
 
-    // progress 
+    // progress bar code
     chrome.tabs.executeScript({
         file: 'progress.js',
-    }, function(result) { 
-        document.getElementById('result').innerText = "요약중 ...\r\n예상 대기 시간 약 " + result[0];
+    }, function (result) { 
+        document.getElementById('result').innerText = "요약중...";
         document.getElementById("probar").max = result[0];
         
-        
-        let myVar1 = setInterval(myTimer, 1000);
-
-        
+        var cur = 0;
+        function myTimer() {
+            document.getElementById("probar").value = cur;
+            if (cur < document.getElementById("probar").max-0.3) {
+                cur += 0.1;
+            }
+        }
+        myInterval = setInterval(myTimer, 100);
     });
     
 
@@ -44,8 +36,8 @@ function bnt1_fn() {
         // set result to storage
         chrome.storage.sync.set({'result': result[0]});
 
-        // 
-        end_time();
+        // finish progress bar
+        clearTimeout(myInterval);
         document.getElementById("probar").value = document.getElementById("probar").max;
     });
 
@@ -53,20 +45,6 @@ function bnt1_fn() {
     chrome.tabs.executeScript({ 
         code: "chrome.storage.sync.set({'url': document.location.href});"
     });
-
-
-
-
-    // chrome.tabs.executeScript(null, { file: "jquery.js" }, function(result) {
-    //     document.getElementById('result').innerText = "요약중...";
-
-    //     chrome.tabs.executeScript(null, { file: "sum.js" }, function(result) {
-    //         document.getElementById('result').innerText = result[0];
-
-    //         chrome.tabs.executeScript({ code: "chrome.storage.sync.set({'url': document.location.href});" })
-    //     })
-    // });
-    
 };
 
 

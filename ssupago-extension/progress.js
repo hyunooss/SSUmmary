@@ -1,6 +1,5 @@
 //-----get text from document-----//
 document_text = document.body.innerText;
-
 result = document_text;
 
 
@@ -9,11 +8,12 @@ ret = "";
 result.split('\n').forEach(function(line) {
     if (line.length > 50) { ret += line; }
 });
-result.replace('。', '.');
-result.replace('、', '.');
-// result = ret.slice(0, 5000);
+ret = ret.replace('。', '.');
+ret = ret.replace('、', '.');
 
-leng = result.length
+
+//-----process time-----//
+leng = ret.length
 
 if (leng > 5000){
     result = 50;
@@ -35,13 +35,5 @@ else {
 }
 
 
-
-
-
 //-----return result to popup.js-----//
-
-
-
-
-
 result

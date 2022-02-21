@@ -12,10 +12,9 @@ ret = "";
 result.split('\n').forEach(function(line) {
     if (line.length > 50) { ret += line; }
 });
-result.replace('。', '.');
-result.replace('、', '.');
-result = ret.slice(0, 5000);
-
+ret = ret.replace('。', '.');
+ret = ret.replace('、', '.');
+result = ret
 
 //-----send text to server and get result-----//
 ssupago_url = "http://127.0.0.1:8000/"
