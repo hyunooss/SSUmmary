@@ -8,8 +8,8 @@ ret = "";
 result.split('\n').forEach(function (line) {
     if (line.length > 50) { ret += line; }
 });
-ret = ret.replace('。', '.');
-ret = ret.replace('、', '.');
+ret = ret.replaceAll('。', '.');
+ret = ret.replaceAll('、', '.');
 
 
 //-----process time-----//

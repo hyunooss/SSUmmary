@@ -62,7 +62,7 @@ class Converter():
         return result
 
     def summ_with_sumz3(self, text):
-        url = "https://summariz3.herokuapp.com/"
+        url = "https://summariz3.herokuapp.com"
 
         # text to sentence
         sentences = self.to_sentences(text)
@@ -72,8 +72,10 @@ class Converter():
         for i in range(len(sentences)):
             dumps += sentences[i] + "."
 
-            # do each sentence size is 40
+            # do 40 sentences each 
             if (i+1) % 40 == 0 or i == len(sentences)-1:
+                print(f"{i}/{len(sentences)}\n{dumps}\n")
+
                 # retry 3 times
                 for trial in range(3):
                     try:
@@ -83,7 +85,11 @@ class Converter():
                         textArea = WebDriverWait(self.browser, 30).until(
                             EC.presence_of_element_located((By.XPATH, '//*[@id="input-3"]'))
                         )
-                        textArea.send_keys(dumps)
+                        self.browser.execute_script("""
+                            var elm = arguments[0]; 
+                            elm.value = arguments[1]; 
+                            elm.dispatchEvent(new Event('change'));
+                            """, textArea, dumps)
                         
                         # '요약하기' 버튼
                         btn = WebDriverWait(self.browser, 30).until(
@@ -100,7 +106,7 @@ class Converter():
                         dumps = ""
                     except Exception as e:
                         if trial == 2:
-                            print(url, dumps)
+                            print(f"{len(dumps)} \n{dumps}")
                             raise e
                     else:
                         break

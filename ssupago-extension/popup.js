@@ -18,7 +18,7 @@ function bnt1_fn() {
         var cur = 0;
         function myTimer() {
             document.getElementById("probar").value = cur;
-            if (cur < document.getElementById("probar").max-0.3) {
+            if (cur < document.getElementById("probar").max-0.5) {
                 cur += 0.1;
             }
         }
