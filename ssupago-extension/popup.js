@@ -14,7 +14,7 @@ function bnt1_fn() {
     }, function (result) {
         // print result
         document.getElementById('result').innerText = result[0];
-
+    
         // set result to storage
         chrome.storage.sync.set({'result': result[0]});
     });

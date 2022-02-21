@@ -20,6 +20,7 @@ class Converter():
         text = text.replace('}', '%7D')
         text = text.replace('[', '%5B')
         text = text.replace(']', '%5D')
+        text = text.replace('^', '%5E')
 
         # retrial
         for trial in range(3):
@@ -30,6 +31,7 @@ class Converter():
                 ).text
             except Exception as e:
                 if trial == 2:
+                    print(url + text)
                     raise e
             else:
                 break
