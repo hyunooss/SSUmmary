@@ -14,7 +14,7 @@
       "js": ["floating_button.js"]
     }
   ],
-  "web_accessible_resources": ["popup.html"],
+  "web_accessible_resources": ["icon-96.png", "popup.html"],
   "permissions": [
     "activeTab",
     "tabs",

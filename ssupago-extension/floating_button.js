@@ -1,7 +1,6 @@
 //-----button for iframe-----//
 var button = document.createElement('div'); 
 button.id = 'floating-button';
-button.innerText = "Click";
 button.classList.add('small');
 document.body.appendChild(button);
 
