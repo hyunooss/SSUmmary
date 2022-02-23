@@ -28,13 +28,32 @@ button.onmousedown = function(event) {
     var y = y1 - button.offsetTop;
 
     var mousemove = function(event) {
+        // drag text disabled
+        event.preventDefault();
+
         button.style.left = event.clientX - x + 'px';
         button.style.top = event.clientY - y + 'px';
+
+        // iframe follow button position
+        let iframeWidth = 250;
+        let iframeHeight = 170;
+        if (event.clientX - x > window.window.innerWidth - iframeWidth) {
+            iframe.style.left = event.clientX - x - iframeWidth + 'px';
+        }
+        else {
+            iframe.style.left = event.clientX - x + 20 + 'px';
+        }
+        if (event.clientY - y > window.window.innerHeight - iframeHeight) {
+            iframe.style.top = event.clientY - y - iframeHeight + 'px';
+        }
+        else {
+            iframe.style.top = event.clientY - y + 20 + 'px';
+        }
     }
     var mouseup = function(event) {
         let dx = Math.abs(event.clientX - x1);
         let dy = Math.abs(event.clientY - y1);
-        if (dx < 5 && dy < 5) {
+        if (dx < 2 && dy < 2) {
             document.body.appendChild(iframe);
         }
 
