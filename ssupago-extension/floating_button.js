@@ -28,8 +28,6 @@ button.onmousedown = function(event) {
     var x = x1 - button.offsetLeft;
     var y = y1 - button.offsetTop;
 
-    console.log(x1, y1, button.offsetLeft, button.offsetTop);
-
     var mousemove = function(event) {
         button.style.left = event.clientX - x + 'px';
         button.style.top = event.clientY - y + 'px';
