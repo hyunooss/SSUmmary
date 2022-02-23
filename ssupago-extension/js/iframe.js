@@ -50,7 +50,11 @@ async function result_textarea_fn(text) {
     document.getElementById("probar").value = document.getElementById("probar").max;
 
     // set url to storage
-    chrome.storage.sync.set({'url': document.location.href});
+    chrome.tabs.executeScript({ 
+        code: "document.location.href;"
+    }, function (current_url) {
+        chrome.storage.sync.set({'url': current_url});
+    });
 };
 
 function bnt1_fn() {
@@ -87,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
             code: "document.location.href;"
         }, function (current_url) {
             document.getElementById('result').innerText = data.result;
-            if (data.url != current_url) {
+            if (data.url != current_url[0]) {
                 document.getElementById('result').innerText = "";
             }
         });
