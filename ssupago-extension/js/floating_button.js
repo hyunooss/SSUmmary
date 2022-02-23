@@ -53,6 +53,8 @@ button.onmousedown = function(event) {
     var mouseup = function(event) {
         let dx = Math.abs(event.clientX - x1);
         let dy = Math.abs(event.clientY - y1);
+        
+        // if click and not drag
         if (dx < 2 && dy < 2) {
             document.body.appendChild(iframe);
         }
