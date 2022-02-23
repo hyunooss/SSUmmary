@@ -3,35 +3,27 @@
 
 <head>
     <meta charset="UTF-8">
-    <style>
-        body { margin: 5px; }
-        .menu { width: 240px; }
-        .menu button { width: 100%; }
-        #result { 
-            resize: none; 
-            width: 97%; 
-            height: 100px;
-        }
-
-        #probar {
-            position: relative;
-            width: 100%;
-            height: 30px;
-        }
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="../css/popup.css">
     <script src="../js/popup.js"></script>
 </head>
 
 <body>
+    <center>
+    
+    <div>
+        <img src="../icon-96.png" width="20" height="20" id="main">
+        <p id="explain"><b>SSuPago</b></p>
+    </div>
 
-<div class="menu">
-    <button id="btn1">번역요약</button>
-    <textarea id="result" disabled></textarea>
+    <div class="wrapper">
+        <p id="ONOFF" class="option_name"><b>OFF</b></p>
+        <input type="checkbox" id="switch" name="tester">
+        <label for="switch" class="switch_label">
+            <span class="onf_btn"></span>
+        </label>
+    </div>
 
-    <progress id="probar" value="0" max="100"></progress>
-
-</div>
+    </center>
 
 </body>
 

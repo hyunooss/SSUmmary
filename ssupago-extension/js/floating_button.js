@@ -5,9 +5,9 @@ button.classList.add('small');
 document.body.appendChild(button);
 
 
-//-----iframe for popup.html-----//
+//-----iframe for iframe.html-----//
 var iframe = document.createElement('iframe');
-iframe.src = chrome.runtime.getURL('html/popup.html');
+iframe.src = chrome.runtime.getURL('html/iframe.html');
 iframe.scrolling = 'no';
 
 

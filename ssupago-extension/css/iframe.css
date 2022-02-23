@@ -1,0 +1,13 @@
+body { margin: 5px; }
+.menu { width: 240px; }
+.menu button { width: 100%; }
+#result { 
+    resize: none; 
+    width: 97%; 
+    height: 100px;
+}
+#probar {
+    position: relative;
+    width: 100%;
+    height: 30px;
+}
