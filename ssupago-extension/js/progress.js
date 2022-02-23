@@ -1,6 +1,5 @@
 //-----get text from document-----//
-document_text = document.body.innerText;
-result = document_text;
+result = document.body.innerText;
 
 
 //-----preprocess text-----//
