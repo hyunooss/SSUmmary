@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
             code: "document.getElementById('floating-button').style.display = '" + (on_off ? 'block' : 'none') + "';"
         });
         
+        document.querySelector('#ONOFF').innerHTML = on_off ? "<b>ON</b>" : "<b>OFF</b>";
+
         // set on_off to storage
         chrome.storage.sync.set({'on_off': on_off});
     };
@@ -16,5 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // get on_off from storage
     chrome.storage.sync.get(function (data) {
         document.querySelector('#switch').checked = data.on_off;
+        document.querySelector('#ONOFF').innerHTML = data.on_off ? "<b>ON</b>" : "<b>OFF</b>";
     });
 });
