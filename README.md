@@ -4,6 +4,9 @@
     Chrome Extensions
 <hr/>
 
+## Examples
+<img src="" width="45%">
+
 ## Dependency
 + **django-server** 
   > pip install django django-cors-headers selenium webdriver_manager
