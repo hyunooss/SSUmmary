@@ -6,13 +6,12 @@
     <style>
         .wrapper { position: relative; }
         #switch {
-        position: absolute;
-        /* hidden */
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
+            position: absolute;
+            /* hidden */
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
         }
-
         .switch_label {
             position: relative;
             cursor: pointer;
@@ -23,39 +22,35 @@
             border: 2px solid #daa;
             border-radius: 20px;
             transition: 0.2s;
-          }
+        }
         .switch_label:hover {
-        background: #efefef;
+            background: #efefef;
         }
         .onf_btn {
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        display: inline-block;
-        width: 19px;
-        height: 19px;
-        border-radius: 20px;
-        background: #daa;
-        transition: 0.2s;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            display: inline-block;
+            width: 19px;
+            height: 19px;
+            border-radius: 20px;
+            background: #daa;
+            transition: 0.2s;
         }
-
-                /* checking style */
+        /* checking style */
         #switch:checked+.switch_label {
             background: #c44;
             border: 2px solid #c44;
         }
-        
         #switch:checked+.switch_label:hover {
             background: #e55;
         }
-        
         /* move */
         #switch:checked+.switch_label .onf_btn {
             left: 33px;
             background: #fff;
             box-shadow: 1px 2px 3px #00000020;
         }
-
     </style>
     <script src="../js/setting.js"></script>
 </head>
@@ -66,7 +61,7 @@
         <label for="switch" class="switch_label">
           <span class="onf_btn"></span>
         </label>
-      </div>
+    </div>
 
 </body>
 

@@ -1,26 +1,20 @@
 'use strict';
 
-
-
 // when popup.html is loaded
 document.addEventListener('DOMContentLoaded', function () {   
-    // add click event to button
-    $(":checkbox[name=tester']").on({
-        click: function(e){
-            
-        }
-    })
-
-    // get result from storage
-    chrome.storage.sync.get(function (data) {
-        // if url is not same, then clear result
-        chrome.tabs.executeScript({ 
-            code: "document.location.href;"
-        }, function (current_url) {
-            document.getElementById('result').innerText = data.result;
-            if (data.url != current_url) {
-                document.getElementById('result').innerText = "";
-            }
+    document.querySelector('#switch').onclick = function (event) {
+        let on_off = event.target.checked;
+        // on/off floating_button
+        chrome.tabs.executeScript({
+            code: "document.getElementById('floating-button').style.display = '" + (on_off ? 'block' : 'none') + "';"
         });
+        
+        // set on_off to storage
+        chrome.storage.sync.set({'on_off': on_off});
+    };
+
+    // get on_off from storage
+    chrome.storage.sync.get(function (data) {
+        document.querySelector('#switch').checked = data.on_off;
     });
 });
