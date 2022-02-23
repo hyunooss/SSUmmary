@@ -5,12 +5,12 @@ var myInterval;
 function bnt1_fn() {
     // jquery code
     chrome.tabs.executeScript({
-        file: '/js/jquery.js',
+        file: '../js/jquery.js',
     });
 
     // progress bar code
     chrome.tabs.executeScript({
-        file: '/js/progress.js',
+        file: '../js/progress.js',
     }, function (result) { 
         document.getElementById('result').innerText = "요약중...";
         document.getElementById("probar").max = result[0];
@@ -27,7 +27,7 @@ function bnt1_fn() {
     
     // summarize.js code
     chrome.tabs.executeScript({ 
-        file: '/js/summarize.js', 
+        file: '../js/summarize.js', 
     }, function (result) {
         // print result
         document.getElementById('result').innerText = result[0];
