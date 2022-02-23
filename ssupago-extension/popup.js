@@ -25,9 +25,9 @@ function bnt1_fn() {
         myInterval = setInterval(myTimer, 100);
     });
     
-    // sum.js code
+    // summarize.js code
     chrome.tabs.executeScript({ 
-        file: 'sum.js', 
+        file: 'summarize.js', 
     }, function (result) {
         // print result
         document.getElementById('result').innerText = result[0];
