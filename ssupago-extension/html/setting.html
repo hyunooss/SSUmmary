@@ -11,6 +11,7 @@
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
+            display: inline;
         }
         .switch_label {
             position: relative;
@@ -51,17 +52,37 @@
             background: #fff;
             box-shadow: 1px 2px 3px #00000020;
         }
+        #explain {
+            font-size: 15px;
+            display: inline;
+        }
+        #ONOFF {
+            font-size: 20px;
+            display: inline;
+        }
+        #main{
+            display: inline;
+        }
     </style>
     <script src="../js/setting.js"></script>
 </head>
 
 <body>
-    <div class="wrapper">
-        <input type="checkbox" id="switch" name="tester">
-        <label for="switch" class="switch_label">
-          <span class="onf_btn"></span>
-        </label>
+    <center>
+    <div style="width: 150px;">
+        <div class="wrapper">
+            <img src="../icon-96.png" width="20" height="20" id="main">
+
+            <p id="explain"><b>SSuPago</b></p>
+            <p></p>
+            <p id="ONOFF"><b>OFF / ON</b></p>
+            <input type="checkbox" id="switch" name="tester">
+            <label for="switch" class="switch_label">
+            <span class="onf_btn"></span>
+            </label>
+        </div>
     </div>
+    </center>
 
 </body>
 
