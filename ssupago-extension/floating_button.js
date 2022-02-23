@@ -1,3 +1,4 @@
+//-----button for iframe-----//
 var button = document.createElement('div'); 
 button.id = 'floating-button';
 button.innerText = "Click";
@@ -5,50 +6,55 @@ button.classList.add('small');
 document.body.appendChild(button);
 
 
-button.onmouseover = function(event) {
-    // add  big class
-    event.target.className = 'big';
-};
-
-button.onmouseleave = function(event) {
-    // add small class
-    event.target.className = 'small';
-};
-
-
+//-----iframe for popup.html-----//
 var iframe = document.createElement('iframe');
 iframe.src = chrome.runtime.getURL('popup.html');
 iframe.scrolling = 'no';
 
 
-button.onclick = function() {
-    // floating popup iframe
-    document.body.appendChild(iframe);
+//-----big/small when mouseover-----//
+button.onmouseover = function(event) {
+    event.target.className = 'big';
+};
+button.onmouseleave = function(event) {
+    event.target.className = 'small';
 };
 
 
-// close when click out of iframe
-window.onclick = function(event) {
-    if (event.target !== button) {
-        if (document.body.hasChildNodes(iframe)) {
-            document.body.removeChild(iframe);
-        }
-    }
-};
-
-
-// button draggable
+//-----button draggable-----//
 button.onmousedown = function(event) {
-    var x = event.clientX - button.offsetLeft;
-    var y = event.clientY - button.offsetTop;
+    var x1 = event.clientX;
+    var y1 = event.clientY;
+    var x = x1 - button.offsetLeft;
+    var y = y1 - button.offsetTop;
+
+    console.log(x1, y1, button.offsetLeft, button.offsetTop);
+
     var mousemove = function(event) {
         button.style.left = event.clientX - x + 'px';
         button.style.top = event.clientY - y + 'px';
     }
-    var mouseup = function() {
+    var mouseup = function(event) {
+        let dx = Math.abs(event.clientX - x1);
+        let dy = Math.abs(event.clientY - y1);
+        if (dx < 5 && dy < 5) {
+            document.body.appendChild(iframe);
+        }
+
         document.removeEventListener('mousemove', mousemove);
         document.removeEventListener('mouseup', mouseup);
     }
     document.addEventListener('mousemove', mousemove);
     document.addEventListener('mouseup', mouseup);
+};
+
+
+//-----close when click out of iframe-----//
+window.onclick = function(event) {
+    if (event.target !== button) {
+        // remove iframe if it is exist
+        if (iframe.parentNode) {
+            iframe.parentNode.removeChild(iframe);
+        }
+    }
 };
