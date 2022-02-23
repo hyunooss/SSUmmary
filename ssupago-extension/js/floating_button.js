@@ -55,3 +55,9 @@ window.onclick = function(event) {
         }
     }
 };
+
+
+// get on_off from storage
+chrome.storage.sync.get(function (data) {
+    document.getElementById('floating-button').style.display = data.on_off ? 'block' : 'none';
+});
