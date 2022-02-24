@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let on_off = event.target.checked;
         // on/off floating_button
         chrome.tabs.executeScript({
-            code: "document.getElementById('floating-button').style.display = '" + (on_off ? 'block' : 'none') + "';"
+            code: "document.getElementById('floating_button').style.display = '" + (on_off ? 'block' : 'none') + "';"
         });
         
         document.querySelector('#ONOFF').innerHTML = on_off ? "<b>ON</b>" : "<b>OFF</b>";

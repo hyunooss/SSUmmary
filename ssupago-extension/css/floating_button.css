@@ -1,4 +1,4 @@
-#floating-button {
+#floating_button {
     position: fixed;
     background: transparent url('chrome-extension://__MSG_@@extension_id__/icon-96.png');
     background-size: contain;
@@ -26,7 +26,7 @@
     font-size: 8px;
 }
 
-iframe {
+#ssupago_iframe {
     position: fixed;
     bottom: 40px;
     right: 40px;

@@ -1,12 +1,13 @@
 //-----button for iframe-----//
 var button = document.createElement('div'); 
-button.id = 'floating-button';
+button.id = 'floating_button';
 button.classList.add('small');
 document.body.appendChild(button);
 
 
 //-----iframe for iframe.html-----//
 var iframe = document.createElement('iframe');
+iframe.id = 'ssupago_iframe';
 iframe.src = chrome.runtime.getURL('html/iframe.html');
 iframe.scrolling = 'no';
 
@@ -80,5 +81,5 @@ window.onclick = function(event) {
 
 // get on_off from storage
 chrome.storage.sync.get(function (data) {
-    document.getElementById('floating-button').style.display = data.on_off ? 'block' : 'none';
+    document.getElementById('floating_button').style.display = data.on_off ? 'block' : 'none';
 });

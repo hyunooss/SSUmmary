@@ -25,17 +25,17 @@ function progress_bar_fn(leng) {
     }
 
     if (!time) {
-        document.getElementById('result').innerText = 'Error';
+        document.getElementById('result_textarea').innerText = 'Error';
         return;
     }
 
-    document.getElementById('result').innerText = "요약중...";
-    document.getElementById("probar").max = time;
+    document.getElementById('result_textarea').innerText = "요약중...";
+    document.getElementById("progress_bar").max = time;
 
     var cur = 0;
     function myTimer() {
-        document.getElementById("probar").value = cur;
-        if (cur < document.getElementById("probar").max-0.5) {
+        document.getElementById("progress_bar").value = cur;
+        if (cur < document.getElementById("progress_bar").max-0.5) {
             cur += 0.1;
         }
     }
@@ -43,11 +43,11 @@ function progress_bar_fn(leng) {
 }
 
 async function result_textarea_fn(text) {
-    document.getElementById('result').innerText = await summarize_fn(text);
+    document.getElementById('result_textarea').innerText = await summarize_fn(text);
 
     // stop progress bar
     clearInterval(myInterval);
-    document.getElementById("probar").value = document.getElementById("probar").max;
+    document.getElementById("progress_bar").value = document.getElementById("progress_bar").max;
 
     // set url to storage
     chrome.tabs.executeScript({ 
@@ -62,11 +62,11 @@ function bnt1_fn() {
         code: "document.body.innerText"
     }, function (text) {
         if (!text) {
-            document.getElementById('result').innerText = 'Error';
+            document.getElementById('result_textarea').innerText = 'Error';
             return;
         }
 
-        document.getElementById('result').innerText = "요약중...";
+        document.getElementById('result_textarea').innerText = "요약중...";
 
         let preprocessed_text = preprocess_text(text[0]);
 
@@ -90,9 +90,9 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.tabs.executeScript({ 
             code: "document.location.href;"
         }, function (current_url) {
-            document.getElementById('result').innerText = data.result;
+            document.getElementById('result_textarea').innerText = data.result;
             if (data.url != current_url[0]) {
-                document.getElementById('result').innerText = "";
+                document.getElementById('result_textarea').innerText = "";
             }
         });
     });
