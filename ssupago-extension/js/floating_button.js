@@ -10,6 +10,8 @@ var iframe = document.createElement('iframe');
 iframe.id = 'ssupago_iframe';
 iframe.src = chrome.runtime.getURL('html/iframe.html');
 iframe.scrolling = 'no';
+iframe.style.display = 'none';
+document.body.appendChild(iframe);
 
 
 //-----big/small when mouseover-----//
@@ -57,7 +59,7 @@ button.onmousedown = function(event) {
         
         // if click and not drag
         if (dx < 2 && dy < 2) {
-            document.body.appendChild(iframe);
+            iframe.style.display = 'block';
         }
 
         document.removeEventListener('mousemove', mousemove);
@@ -73,7 +75,7 @@ window.onclick = function(event) {
     if (event.target !== button) {
         // remove iframe if it is exist
         if (iframe.parentNode) {
-            iframe.parentNode.removeChild(iframe);
+            iframe.style.display = 'none';
         }
     }
 };

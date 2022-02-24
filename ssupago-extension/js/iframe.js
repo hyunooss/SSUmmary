@@ -43,17 +43,19 @@ function progress_bar_fn(leng) {
 }
 
 async function result_textarea_fn(text) {
-    document.getElementById('result_textarea').innerText = await summarize_fn(text);
+    var result = await summarize_fn(text);
+    document.getElementById('result_textarea').innerText = await result;
 
     // stop progress bar
     clearInterval(myInterval);
     document.getElementById("progress_bar").value = document.getElementById("progress_bar").max;
 
-    // set url to storage
+    // set data to storage
     chrome.tabs.executeScript({ 
         code: "document.location.href;"
     }, function (current_url) {
-        chrome.storage.sync.set({'url': current_url});
+        chrome.storage.sync.set({'url': current_url[0]});
+        chrome.storage.sync.set({'result': result});
     });
 };
 
