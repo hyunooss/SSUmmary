@@ -34,23 +34,29 @@ button.onmousedown = function(event) {
         // drag text disabled
         event.preventDefault();
 
-        button.style.left = event.clientX - x + 'px';
-        button.style.top = event.clientY - y + 'px';
+        let x2 = event.clientX - x;
+        let y2 = event.clientY - y;
+
+        // stop going beyond the window
+        x2 = Math.min(Math.max(x2, 0), window.window.innerWidth - button.offsetWidth);
+        y2 = Math.min(Math.max(y2, 0), window.window.innerHeight - button.offsetHeight);
+        button.style.left = x2 + 'px';
+        button.style.top = y2 + 'px';
 
         // iframe follow button position
         let iframeWidth = 250;
         let iframeHeight = 170;
-        if (event.clientX - x > window.window.innerWidth - iframeWidth) {
-            iframe.style.left = event.clientX - x - iframeWidth + 'px';
+        if (x2 > window.window.innerWidth - iframeWidth) {
+            iframe.style.left = x2 - iframeWidth + 'px';
         }
         else {
-            iframe.style.left = event.clientX - x + 20 + 'px';
+            iframe.style.left = x2 + 20 + 'px';
         }
-        if (event.clientY - y > window.window.innerHeight - iframeHeight) {
-            iframe.style.top = event.clientY - y - iframeHeight + 'px';
+        if (y2 > window.window.innerHeight - iframeHeight) {
+            iframe.style.top = y2 - iframeHeight + 'px';
         }
         else {
-            iframe.style.top = event.clientY - y + 20 + 'px';
+            iframe.style.top = y2 + 20 + 'px';
         }
     }
     var mouseup = function(event) {
