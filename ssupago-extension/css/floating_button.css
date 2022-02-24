@@ -1,11 +1,19 @@
 #floating_button {
     position: fixed;
-    background: transparent url('chrome-extension://__MSG_@@extension_id__/icon-96.png');
-    background-size: contain;
     text-align: center;
     color: white;
     cursor: pointer;
     z-index: 9998;
+}
+
+#floating_button.normal {
+    background: transparent url('chrome-extension://__MSG_@@extension_id__/normal.png');
+    background-size: contain;
+}
+
+#floating_button.clicked {
+    background: transparent url('chrome-extension://__MSG_@@extension_id__/clicked.png');
+    background-size: contain;
 }
 
 .big {

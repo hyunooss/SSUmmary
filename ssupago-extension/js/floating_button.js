@@ -2,6 +2,7 @@
 var button = document.createElement('div'); 
 button.id = 'floating_button';
 button.classList.add('small');
+button.classList.add('normal');
 document.body.appendChild(button);
 
 
@@ -16,10 +17,12 @@ document.body.appendChild(iframe);
 
 //-----big/small when mouseover-----//
 button.onmouseover = function(event) {
-    event.target.className = 'big';
+    event.target.classList.add('big');
+    button.classList.remove('small');
 };
 button.onmouseleave = function(event) {
-    event.target.className = 'small';
+    button.classList.remove('big');
+    event.target.classList.add('small');
 };
 
 
@@ -66,6 +69,8 @@ button.onmousedown = function(event) {
         // if click and not drag
         if (dx < 2 && dy < 2) {
             iframe.style.display = 'block';
+            button.classList.add('clicked');
+            button.classList.remove('normal');
         }
 
         document.removeEventListener('mousemove', mousemove);
@@ -82,6 +87,8 @@ window.onclick = function(event) {
         // remove iframe if it is exist
         if (iframe.parentNode) {
             iframe.style.display = 'none';
+            button.classList.remove('clicked');
+            button.classList.add('normal');
         }
     }
 };
