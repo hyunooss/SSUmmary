@@ -9,7 +9,6 @@ function summarize_fn(text) {
             Headers: {
                 'Access-Control-Allow-Origin': '*',
             },
-            // async: false,
             beforeSend: function(){
                 console.log("length: " + text.length + "\nbefore:\n" + text);
             },

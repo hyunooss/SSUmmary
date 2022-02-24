@@ -3,7 +3,9 @@ var button = document.createElement('div');
 button.id = 'floating_button';
 button.classList.add('small');
 button.classList.add('normal');
-document.body.appendChild(button);
+if (!opener) {
+    document.body.appendChild(button);
+}
 
 
 //-----iframe for iframe.html-----//
