@@ -13,7 +13,8 @@ def ssuapgo(request):
 
         # split text into sentences
         text_kor = converter.trans_with_papago(text)
-        text_sum = converter.summ_with_sumz3(text_kor)
+        # text_sum = converter.summ_with_sumz3(text_kor)
+        text_sum = converter.summ_with_smodin(text_kor)
 
         # send response
         response = HttpResponse(text_sum)

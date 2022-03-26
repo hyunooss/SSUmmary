@@ -19,7 +19,7 @@ class Converter():
         sentences = [s for s in sentences if s != ""]
         return sentences
 
-    def trans_with_papago(self, text):
+    def trans_with_papago(self, text, debug=0):
         url = "https://papago.naver.com/?sk=auto&tk=ko&st="
         # preprocessing
         text = text.replace('%', '%25')
@@ -41,7 +41,8 @@ class Converter():
             dumps += sentences[i] + "."
 
             if len(dumps) >= 800 or i == len(sentences)-1:
-                print(f"{i}/{len(sentences)}\n{dumps}\n")
+                if debug == 1:
+                    print(f"{i}/{len(sentences)}\n{dumps}\n")
 
                 # retry 3 times
                 for trial in range(3):
@@ -61,7 +62,7 @@ class Converter():
                         break
         return result
 
-    def summ_with_sumz3(self, text):
+    def summ_with_sumz3(self, text, debug=0):
         url = "https://summariz3.herokuapp.com"
 
         # text to sentence
@@ -74,7 +75,8 @@ class Converter():
 
             # do 40 sentences each 
             if (i+1) % 40 == 0 or i == len(sentences)-1:
-                print(f"{i}/{len(sentences)}\n{dumps}\n")
+                if debug == 1:
+                    print(f"{i}/{len(sentences)}\n{dumps}\n")
 
                 # retry 3 times
                 for trial in range(3):
@@ -100,6 +102,63 @@ class Converter():
                         # '요약 결과'
                         result += WebDriverWait(self.browser, 60).until(
                             EC.presence_of_element_located((By.XPATH, '//*[@id="container"]/div[2]/div[2]'))
+                        ).text
+
+                        # clean dumps
+                        dumps = ""
+                    except Exception as e:
+                        if trial == 2:
+                            print(f"{len(dumps)} \n{dumps}")
+                            raise e
+                    else:
+                        break
+        return result
+
+    def summ_with_smodin(self, text, debug=0):
+        url = "https://smodin.io/ko/텍스트요약기"
+
+        # text to sentence
+        sentences = self.to_sentences(text)
+
+        # summarize each sentence
+        result, dumps = "", ""
+        for i in range(len(sentences)):
+            dumps += sentences[i] + "."
+
+            # do 40 sentences each 
+            if (i+1) % 40 == 0 or i == len(sentences)-1:
+                if debug == 1:
+                    print(f"{i}/{len(sentences)}\n{dumps}\n")
+
+                # retry 3 times
+                for trial in range(3):
+                    try:
+                        self.browser.get(url)
+                        
+                        # '요약하고 싶은 텍스트' 입력
+                        textArea = WebDriverWait(self.browser, 30).until(
+                            EC.presence_of_element_located((By.XPATH, 
+                            '//*[@id="__next"]/div/div[2]/div[1]/div/div/div[2]/textarea'))
+                        )
+                        self.browser.execute_script("""
+                            var elm = arguments[0]; 
+                            elm.value = arguments[1]; 
+                            elm.dispatchEvent(new Event('change'));
+                            """, textArea, dumps)
+                        textArea.click()
+                        textArea.send_keys(" ")
+                        
+                        # '요약하기' 버튼
+                        btn = WebDriverWait(self.browser, 30).until(
+                            EC.presence_of_element_located((By.XPATH, 
+                            '//*[@id="__next"]/div/div[2]/div[1]/div/div/div[5]/button[1]/span[1]'))
+                        )
+                        btn.click()
+                        
+                        # '요약 결과'
+                        result += WebDriverWait(self.browser, 60).until(
+                            EC.presence_of_element_located((By.XPATH, 
+                            '//*[@id="__next"]/div/div[2]/div[1]/div/div/div[5]/div[2]'))
                         ).text
 
                         # clean dumps
