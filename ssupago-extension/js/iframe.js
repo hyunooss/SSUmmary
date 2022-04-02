@@ -57,9 +57,12 @@ async function result_textarea_fn(text) {
         chrome.storage.sync.set({'url': current_url[0]});
         chrome.storage.sync.set({'result': result});
     });
+
+    document.getElementById('btn1').disabled = false;
 };
 
 function bnt1_fn() {
+    
     chrome.tabs.executeScript({ 
         code: "document.body.innerText"
     }, function (text) {
@@ -67,7 +70,8 @@ function bnt1_fn() {
             document.getElementById('result_textarea').innerText = 'Error';
             return;
         }
-
+        document.getElementById('btn1').disabled = true;
+        
         document.getElementById('result_textarea').innerText = "요약중...";
 
         let preprocessed_text = preprocess_text(text[0]);
