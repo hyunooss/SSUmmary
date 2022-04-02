@@ -8,12 +8,82 @@ import torch
 from transformers import PreTrainedTokenizerFast
 from transformers import BartForConditionalGeneration
 
-class Summarizer:
+import urllib.request
+
+from langdetect import detect
+
+from googletrans import Translator
+
+
+def to_sentences(text):
+    text = text.replace("\n", "")
+    sentences = " ".join(text.split()).split(".")
+    sentences = [s for s in sentences if s != ""]
+    return sentences
+
+def divide(text, input_size=5000):
+    # short input_size if asian
+    lang = detect(text)
+    if lang in ['ko', 'ja', 'zh-cn', 'zh-tw', 'zh-hk']:
+        input_size = 1300
+
+    # divide text by words
+    text = to_sentences(text)
+    result = []
+    temp = ""
+    for word in text:
+        if len(temp + word) >= input_size:
+            result.append(temp)
+            temp = ""
+        temp += word + " "
+    result.append(temp)
+    return result
+
+
+class Translater_with_papago_api:
+    def __init__(self):
+        self.client_id = "ACTEz0YaXKIVplDTV2lE"
+        self.client_secret = "PnDLJZHsZl"
+
+    def translate(self, text):
+        result = None
+
+        lang = detect(text)
+        encText = urllib.parse.quote(text)
+        data = f"source={lang}&target=en&text=" + encText
+        url = "https://openapi.naver.com/v1/papago/n2mt"
+
+        request = urllib.request.Request(url)
+        request.add_header("X-Naver-Client-Id", self.client_id)
+        request.add_header("X-Naver-Client-Secret", self.client_secret)
+        response = urllib.request.urlopen(request, data=data.encode("utf-8"))
+        
+        rescode = response.getcode()
+        if rescode == 200:
+            response_body = response.read()
+            result = response_body.decode('utf-8')
+        else:
+            result = "Error Code:" + rescode
+
+        return result
+
+class Translater_with_googletrans:
+    def __init__(self):
+        self.translator = Translator()
+
+    def translate(self, text, input_size=5000):
+        result = ""
+        dumps = divide(text, input_size=input_size)
+        for dump in dumps:
+            result += self.translator.translate(dump, dest='ko').text
+        return result
+
+class Summarizer_with_KoBart:
     def __init__(self, model_name):
         self.tokenizer = PreTrainedTokenizerFast.from_pretrained(model_name)
         self.model     = BartForConditionalGeneration.from_pretrained(model_name)
         
-    def generate(self, text, input_size=1024, mode=0):
+    def generate(self, text, input_size=1024, deep=False):
         result = ""
         
         loop = 0
@@ -22,7 +92,7 @@ class Summarizer:
             size =  size // 100
             loop += 1
             
-        if mode == 0:
+        if not deep:
             loop = 1
         
         for _ in range(loop):
@@ -40,26 +110,25 @@ class Summarizer:
                 result += self.tokenizer.decode(summary_ids.squeeze().tolist(), skip_special_tokens=True)
         return result
 
+
 class Converter:
     def __init__(self):
         # initialize summarizer instance
-        self.summarizer = Summarizer('digit82/kobart-summarization')
+        self.summarizer = Summarizer_with_KoBart('digit82/kobart-summarization')
         print("Log: summarizor loaded successfully")
+
+        # initialize translater instance
+        self.translater = Translater_with_googletrans()
+        print("Log: translater loaded successfully")
 
         # initialize browser
         path = ChromeDriverManager().install()
         options = webdriver.ChromeOptions()
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
         options.add_argument("--log-level=3")
         options.add_experimental_option('useAutomationExtension', False)
         self.browser = webdriver.Chrome(path, options=options)
         print("Log: browser loaded successfully")
-
-    def to_sentences(self, text):
-        text = text.replace("\n", "")
-        sentences = " ".join(text.split()).split(".")
-        sentences = [s for s in sentences if s != ""]
-        return sentences
 
     def trans_with_papago(self, text, debug=0):
         url = "https://papago.naver.com/?sk=auto&tk=ko&st="
@@ -108,7 +177,7 @@ class Converter:
         url = "https://summariz3.herokuapp.com"
 
         # text to sentence
-        sentences = self.to_sentences(text)
+        sentences = to_sentences(text)
 
         # summarize each sentence
         result, dumps = "", ""
@@ -156,5 +225,8 @@ class Converter:
                         break
         return result
 
-    def summarize(self, text, input_size=1024, mode=0):
-        return self.summarizer.generate(text, input_size=input_size, mode=mode)
+    def translate(self, text, input_size=5000):
+        return self.translater.translate(text, input_size=input_size)
+
+    def summarize(self, text, input_size=1024, deep=False):
+        return self.summarizer.generate(text, input_size=input_size, deep=deep)
