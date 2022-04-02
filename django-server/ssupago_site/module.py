@@ -4,14 +4,56 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-class Converter():
+import torch
+from transformers import PreTrainedTokenizerFast
+from transformers import BartForConditionalGeneration
+
+class Summarizer:
+    def __init__(self, model_name):
+        self.tokenizer = PreTrainedTokenizerFast.from_pretrained(model_name)
+        self.model     = BartForConditionalGeneration.from_pretrained(model_name)
+        
+    def generate(self, text, input_size=1024, mode=0):
+        result = ""
+        
+        loop = 0
+        size = len(text)
+        while size // 100 > 0:
+            size =  size // 100
+            loop += 1
+            
+        if mode == 0:
+            loop = 1
+        
+        for _ in range(loop):
+            if result:
+                text = result
+            text = text.replace('\n', ' ')
+            raw_input_ids = self.tokenizer.encode(text)
+
+            result = ""
+            for i in range(0, len(raw_input_ids), input_size):
+                dump = raw_input_ids[i:i+input_size]
+
+                input_ids = [self.tokenizer.bos_token_id] + dump + [self.tokenizer.eos_token_id]
+                summary_ids = self.model.generate(torch.tensor([input_ids]),  num_beams=4,  max_length=512,  eos_token_id=1)
+                result += self.tokenizer.decode(summary_ids.squeeze().tolist(), skip_special_tokens=True)
+        return result
+
+class Converter:
     def __init__(self):
+        # initialize summarizer instance
+        self.summarizer = Summarizer('digit82/kobart-summarization')
+        print("Log: summarizor loaded successfully")
+
+        # initialize browser
         path = ChromeDriverManager().install()
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
+        # options.add_argument("--headless")
         options.add_argument("--log-level=3")
         options.add_experimental_option('useAutomationExtension', False)
         self.browser = webdriver.Chrome(path, options=options)
+        print("Log: browser loaded successfully")
 
     def to_sentences(self, text):
         text = text.replace("\n", "")
@@ -114,59 +156,5 @@ class Converter():
                         break
         return result
 
-    def summ_with_smodin(self, text, debug=0):
-        url = "https://smodin.io/ko/텍스트요약기"
-
-        # text to sentence
-        sentences = self.to_sentences(text)
-
-        # summarize each sentence
-        result, dumps = "", ""
-        for i in range(len(sentences)):
-            dumps += sentences[i] + "."
-
-            # do 40 sentences each 
-            if (i+1) % 40 == 0 or i == len(sentences)-1:
-                if debug == 1:
-                    print(f"{i}/{len(sentences)}\n{dumps}\n")
-
-                # retry 3 times
-                for trial in range(3):
-                    try:
-                        self.browser.get(url)
-                        
-                        # '요약하고 싶은 텍스트' 입력
-                        textArea = WebDriverWait(self.browser, 30).until(
-                            EC.presence_of_element_located((By.XPATH, 
-                            '//*[@id="__next"]/div/div[2]/div[1]/div/div/div[2]/textarea'))
-                        )
-                        self.browser.execute_script("""
-                            var elm = arguments[0]; 
-                            elm.value = arguments[1]; 
-                            elm.dispatchEvent(new Event('change'));
-                            """, textArea, dumps)
-                        textArea.click()
-                        textArea.send_keys(" ")
-                        
-                        # '요약하기' 버튼
-                        btn = WebDriverWait(self.browser, 30).until(
-                            EC.presence_of_element_located((By.XPATH, 
-                            '//*[@id="__next"]/div/div[2]/div[1]/div/div/div[5]/button[1]/span[1]'))
-                        )
-                        btn.click()
-                        
-                        # '요약 결과'
-                        result += WebDriverWait(self.browser, 60).until(
-                            EC.presence_of_element_located((By.XPATH, 
-                            '//*[@id="__next"]/div/div[2]/div[1]/div/div/div[5]/div[2]'))
-                        ).text
-
-                        # clean dumps
-                        dumps = ""
-                    except Exception as e:
-                        if trial == 2:
-                            print(f"{len(dumps)} \n{dumps}")
-                            raise e
-                    else:
-                        break
-        return result
+    def summarize(self, text, input_size=1024, mode=0):
+        return self.summarizer.generate(text, input_size=input_size, mode=mode)
