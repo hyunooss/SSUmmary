@@ -13,9 +13,6 @@ def ssuapgo(request):
     if request.method == 'POST':
         text = request.POST['content']
 
-        # text_kor = converter.trans_with_papago(text)
-        # text_sum = converter.summ_with_sumz3(text_kor)
-
 
         ## ---시간측정--- ##
         import time
