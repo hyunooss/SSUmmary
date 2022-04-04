@@ -70,9 +70,8 @@ function bnt1_fn() {
             document.getElementById('result_textarea').innerText = 'Error';
             return;
         }
-        document.getElementById('btn1').disabled = true;
-        
         document.getElementById('result_textarea').innerText = "요약중...";
+        document.getElementById('btn1').disabled = true;
 
         let preprocessed_text = preprocess_text(text[0]);
 
