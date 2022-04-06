@@ -6,7 +6,7 @@ from . import module
 converter = module.Converter()
 
 #--- Function-based View
-def ssuapgo(request):
+def ssummary(request):
     if request.method == 'GET':
         return HttpResponse('GET request received')
 

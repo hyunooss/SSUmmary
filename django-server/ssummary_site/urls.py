@@ -1,4 +1,4 @@
-"""ssupago_site URL Configuration
+"""ssummary_site URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -19,5 +19,5 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.ssuapgo, name='ssupago'),
+    path('', views.ssummary, name='ssummary'),
 ]

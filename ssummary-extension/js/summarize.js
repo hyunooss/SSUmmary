@@ -1,10 +1,10 @@
 function summarize_fn(text) {
     return new Promise(function (resolve, reject) {
         //-----send text to server and get result-----//
-        ssupago_url = "http://127.0.0.1:8000/"
+        ssummary_url = "http://127.0.0.1:8000/"
         $.ajax({
             type: 'POST',
-            url: ssupago_url,
+            url: ssummary_url,
             data: { 'content': text },
             Headers: {
                 'Access-Control-Allow-Origin': '*',

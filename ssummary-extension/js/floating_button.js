@@ -10,7 +10,7 @@ if (!opener) {
 
 //-----iframe for iframe.html-----//
 var iframe = document.createElement('iframe');
-iframe.id = 'ssupago_iframe';
+iframe.id = 'ssummary_iframe';
 iframe.src = chrome.runtime.getURL('html/iframe.html');
 iframe.scrolling = 'no';
 iframe.style.display = 'none';
