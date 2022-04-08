@@ -22,6 +22,13 @@ def to_sentences(text):
     return sentences
 
 def divide(text, input_size=5000):
+    """
+    Divide text into chunks of input_size
+
+    Args:
+        text (str): Text to be divided
+        input_size (int): Size of each chunk
+    """
     # short input_size if asian
     lang = detect(text)
     if lang in ['ko', 'ja', 'zh-cn', 'zh-tw', 'zh-hk']:
@@ -96,6 +103,9 @@ class Translater_with_Cralwing:
                         break
         return result
 
+    def translate(self, text, input_size=5000):
+        return self.translate(text)
+
 class Translater_with_papago_api:
     def __init__(self):
         self.client_id = "ACTEz0YaXKIVplDTV2lE"
@@ -122,6 +132,9 @@ class Translater_with_papago_api:
             result = "Error Code:" + rescode
 
         return result
+
+    def translate(self, text, input_size=5000):
+        return self.translate(text)
 
 class Translater_with_googletrans:
     def __init__(self):
@@ -186,6 +199,9 @@ class Summarizer_with_Cralwing:
                         break
         return result
 
+    def generate(self, text, input_size=1024, deep=False):
+        return self.generate(text)
+
 class Summarizer_with_KoBart:
     def __init__(self, model_name):
         self.tokenizer = PreTrainedTokenizerFast.from_pretrained(model_name)
@@ -230,7 +246,22 @@ class Converter:
         print("Log: translater loaded successfully")       
 
     def translate(self, text, input_size=5000):
+        """
+        Translate the text into Korean by dividing it into chunks.
+
+        Args:
+            text (str): Text to be translated
+            input_size (int): Size of each chunk
+        """
         return self.translater.translate(text, input_size=input_size)
 
     def summarize(self, text, input_size=1024, deep=False):
+        """
+        Summarize the text by dividing it into chunks.
+
+        args:
+            text (str): Text to be translated
+            input_size (int): Size of each chunk
+            deep (bool): Whether to use deep summarization
+        """
         return self.summarizer.generate(text, input_size=input_size, deep=deep)
