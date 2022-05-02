@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.sync.set({'on_off': on_off});
     };
 
+    document.querySelector('#switch2').onclick = function (event) {
+        let on_off = event.target.checked;
+        
+        // set on_off to storage
+        chrome.storage.sync.set({'deep': on_off});
+    };
+
     // get on_off from storage
     chrome.storage.sync.get(function (data) {
         document.querySelector('#switch').checked = data.on_off;
