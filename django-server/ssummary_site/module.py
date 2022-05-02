@@ -210,14 +210,13 @@ class Summarizer_with_KoBart:
     def generate(self, text, input_size=1024, deep=False):
         result = ""
         
-        loop = 0
-        size = len(text)
-        while size // 100 > 0:
-            size =  size // 100
-            loop += 1
-            
-        if not deep:
-            loop = 1
+        loop = 1
+        if deep == True:
+            loop = 0
+            size = len(text)
+            while size // 100 > 0:
+                size =  size // 100
+                loop += 1
         
         for _ in range(loop):
             if result:
@@ -237,13 +236,13 @@ class Summarizer_with_KoBart:
 
 class Converter:
     def __init__(self):
-        # initialize summarizer instance
-        self.summarizer = Summarizer_with_KoBart('digit82/kobart-summarization')
-        print("Log: summarizor loaded successfully")
-
         # initialize translater instance
         self.translater = Translater_with_googletrans()
         print("Log: translater loaded successfully")       
+
+        # initialize summarizer instance
+        self.summarizer = Summarizer_with_KoBart('digit82/kobart-summarization')
+        print("Log: summarizor loaded successfully")
 
     def translate(self, text, input_size=5000):
         """

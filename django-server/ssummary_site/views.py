@@ -12,19 +12,19 @@ def ssummary(request):
 
     if request.method == 'POST':
         text = request.POST['content']
-        deep = request.POST['deep']
+        deep = True if request.POST['deep'] == 'true' else False
 
         ## ---시간측정--- ##
         import time
         start = time.time()
         text_kor = converter.translate(text, input_size=5000)
-        print("\ntrans_time:", time.time() - start)
+        print("\n번역 소요시간:", time.time() - start)
 
         start = time.time()
         text_sum = converter.summarize(text_kor, deep=deep)
-        if deep == True:
-            print("deep ", end="")
-        print("summ_time:", time.time() - start)
+        if deep == True: print("깊은 ", end="")
+        else: print("얕은 ", end="")
+        print("요약 소요시간:", time.time() - start)
         ## ---시간측정--- ##
 
 
