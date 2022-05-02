@@ -22,7 +22,7 @@ def ssummary(request):
 
         start = time.time()
         text_sum = converter.summarize(text_kor, deep=deep)
-        if deep: print("depp ", end="")
+        if deep: print("deep ", end="")
         print("summ_time:", time.time() - start)
         ## ---시간측정--- ##
 
