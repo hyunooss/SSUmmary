@@ -6,6 +6,15 @@ body {
     position: relative; 
     width: 110px;
     height: 40px;
+    margin-top: 10px;
+}
+#Floating_ONOFF {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+#Deep_ONOFF {
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 #switch, #switch2 {    
     appearance: none;
