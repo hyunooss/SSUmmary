@@ -11,7 +11,7 @@ def ssummary(request):
         return HttpResponse('GET request received')
 
     if request.method == 'POST':
-        text   = request.POST['content']
+        text = request.POST['content']
         deep = request.POST['deep']
 
         ## ---시간측정--- ##
