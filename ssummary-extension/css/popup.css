@@ -56,7 +56,7 @@ body {
     width: 18px;
     height: 18px;
     border-radius: 18px;
-    background: #daa;
+    background: #aad;
     transition: 0.2s;
 }
 /* checking style */
@@ -73,6 +73,21 @@ body {
     background: #fff;
     box-shadow: 1px 2px 3px #00000020;
 }
+
+#switch2:checked+.switch_label2 {
+    background: #44c;
+    border: 2px solid #44c;
+}
+#switch2:checked+.switch_label2:hover {
+    background: #55e;
+}
+/* move */
+#switch2:checked+.switch_label2 .onf_btn2 {
+    left: 22px;
+    background: #fff;
+    box-shadow: 1px 2px 3px #00000020;
+}
+
 #explain {
     font-size: 15px;
     display: inline;
