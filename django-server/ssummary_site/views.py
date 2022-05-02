@@ -18,11 +18,12 @@ def ssummary(request):
         import time
         start = time.time()
         text_kor = converter.translate(text, input_size=5000)
-        print("trans_time:", time.time() - start)
+        print("\ntrans_time:", time.time() - start)
 
         start = time.time()
         text_sum = converter.summarize(text_kor, deep=deep)
-        if deep: print("deep ", end="")
+        if deep == True:
+            print("deep ", end="")
         print("summ_time:", time.time() - start)
         ## ---시간측정--- ##
 
