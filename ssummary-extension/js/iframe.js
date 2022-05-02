@@ -80,7 +80,7 @@ function bnt1_fn() {
 
         // summarize
         chrome.storage.sync.get(function (data) {
-            const deep = data.deep ? data.deep : false;
+            const deep = data.deep ? true : false;
             result_textarea_fn(preprocessed_text, deep);
         });
     }); 
