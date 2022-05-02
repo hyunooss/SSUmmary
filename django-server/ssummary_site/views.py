@@ -11,8 +11,8 @@ def ssummary(request):
         return HttpResponse('GET request received')
 
     if request.method == 'POST':
-        text = request.POST['content']
-
+        text   = request.POST['content']
+        deep = request.POST['deep']
 
         ## ---시간측정--- ##
         import time
@@ -21,7 +21,8 @@ def ssummary(request):
         print("trans_time:", time.time() - start)
 
         start = time.time()
-        text_sum = converter.summarize(text_kor, deep=True)
+        text_sum = converter.summarize(text_kor, deep=deep)
+        if deep: print("depp ", end="")
         print("summ_time:", time.time() - start)
         ## ---시간측정--- ##
 
