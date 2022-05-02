@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // get on_off from storage
     chrome.storage.sync.get(function (data) {
         document.querySelector('#switch').checked = data.on_off;
+        document.querySelector('#switch2').checked = data.deep;
         document.querySelector('#ONOFF').innerHTML = data.on_off ? "<b>ON</b>" : "<b>OFF</b>";
     });
 });
