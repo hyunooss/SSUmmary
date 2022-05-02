@@ -3,7 +3,7 @@
 // when popup.html is loaded
 document.addEventListener('DOMContentLoaded', function () {   
     document.querySelector('#switch').onclick = function (event) {
-        let on_off = event.target.checked;
+        const on_off = event.target.checked;
         // on/off floating_button
         chrome.tabs.executeScript({
             code: "document.getElementById('floating_button').style.display = '" + (on_off ? 'block' : 'none') + "';"
@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     document.querySelector('#switch2').onclick = function (event) {
-        let on_off = event.target.checked;
-        
+        const on_off = event.target.checked;
+
         // set on_off to storage
         chrome.storage.sync.set({'deep': on_off});
     };
