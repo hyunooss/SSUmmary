@@ -81,6 +81,9 @@ function bnt1_fn() {
         // summarize
         chrome.storage.sync.get(function (data) {
             const deep = data.deep ? true : false;
+
+            document.getElementById('result_textarea').innerText += "deep is " + deep
+            
             result_textarea_fn(preprocessed_text, deep);
         });
     }); 
