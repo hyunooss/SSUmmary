@@ -42,8 +42,8 @@ function progress_bar_fn(leng) {
     myInterval = setInterval(myTimer, 100);
 }
 
-async function result_textarea_fn(text) {
-    var result = await summarize_fn(text);
+async function result_textarea_fn(text, deep) {
+    var result = await summarize_fn(text, deep);
     document.getElementById('result_textarea').innerText = await result;
 
     // stop progress bar
@@ -79,7 +79,9 @@ function bnt1_fn() {
         progress_bar_fn(preprocessed_text.length);
 
         // summarize
-        result_textarea_fn(preprocessed_text);
+        chrome.storage.sync.get(function (data) {
+            result_textarea_fn(preprocessed_text, data.deep);
+        });
     }); 
 };
 
