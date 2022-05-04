@@ -14,6 +14,11 @@ from langdetect import detect
 
 from googletrans import Translator
 
+import fasttext.util
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+import networkx as nx
+
 
 def to_sentences(text):
     text = text.replace("\n", "")
@@ -233,6 +238,62 @@ class Summarizer_with_KoBart:
                 result += self.tokenizer.decode(summary_ids.squeeze().tolist(), skip_special_tokens=True)
         return result
 
+class Summarizer_with_textrank:
+    def __init__(self):
+        self.ft = fasttext.load_model('models/cc.ko.300.vec')
+        
+    def similarity_matrix(sentence_embedding):
+        embedding_dim = 300
+        sim_mat = np.zeros([len(sentence_embedding), len(sentence_embedding)])
+        for i in range(len(sentence_embedding)):
+            for j in range(len(sentence_embedding)):
+                sim_mat[i][j] = cosine_similarity(sentence_embedding[i].reshape(1, embedding_dim),
+                                            sentence_embedding[j].reshape(1, embedding_dim))[0,0]
+        return sim_mat    
+        
+    def calculate_sentence_vector(sentence):
+        embedding_dim = 300
+        zero_vector = np.zeros(embedding_dim)
+        if len(sentence) == 0:
+            return zero_vector
+        return sum([self.ft.get_word_vector(word) for word in sentence])/len(sentence)
+    
+    def calculate_score(sim_matrix):
+        nx_graph = nx.from_numpy_array(sim_matrix)
+        scores = nx.pagerank(nx_graph)
+        return scores
+    
+    def ranked_sentences(sentences, scores, n=3):
+        top_scores = sorted(((scores[i],s) for i,s in enumerate(sentences)), reverse=True)
+        top_n_sentences = [sentence for score,sentence in top_scores[:n]]
+        return " ".join(top_n_sentences)
+        
+    def generate(self, text, input_size=1024, deep=False):
+        result = ""
+        
+        loop = 1
+        if deep == True:
+            loop = 0
+            size = len(text)
+            while size // 100 > 0:
+                size =  size // 100
+                loop += 1
+        
+        for _ in range(loop):
+            if result:
+                text = result
+            sentences = text.split('.')
+            
+            sentence_vectors = [self.calculate_sentence_vector(sentence) for sentence in sentences]
+            matrixs = self.similarity_matrix(sentence_vectors)
+            scores = self.calculate_score(matrixs)
+            result = self.ranked_sentences(sentences, scores, n=3)
+        
+        return result
+        
+    
+    
+    
 
 class Converter:
     def __init__(self):
@@ -241,7 +302,8 @@ class Converter:
         print("Log: translater loaded successfully")       
 
         # initialize summarizer instance
-        self.summarizer = Summarizer_with_KoBart('digit82/kobart-summarization')
+        # self.summarizer = Summarizer_with_KoBart('digit82/kobart-summarization')
+        self.summarizer = Summarizer_with_textrank()
         print("Log: summarizor loaded successfully")
 
     def translate(self, text, input_size=5000):
