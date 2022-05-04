@@ -239,10 +239,12 @@ class Summarizer_with_KoBart:
         return result
 
 class Summarizer_with_textrank:
+    # 추출 요약 기반 텍스트 랭크
     def __init__(self):
-        self.ft = fasttext.load_model('models/cc.ko.300.vec')
+        fasttext.FastText.eprint = lambda x: None
+        self.ft = fasttext.load_model('models/cc.ko.300.bin')
         
-    def similarity_matrix(sentence_embedding):
+    def similarity_matrix(self, sentence_embedding):
         embedding_dim = 300
         sim_mat = np.zeros([len(sentence_embedding), len(sentence_embedding)])
         for i in range(len(sentence_embedding)):
@@ -251,24 +253,24 @@ class Summarizer_with_textrank:
                                             sentence_embedding[j].reshape(1, embedding_dim))[0,0]
         return sim_mat    
         
-    def calculate_sentence_vector(sentence):
+    def calculate_sentence_vector(self, sentence):
         embedding_dim = 300
         zero_vector = np.zeros(embedding_dim)
         if len(sentence) == 0:
             return zero_vector
         return sum([self.ft.get_word_vector(word) for word in sentence])/len(sentence)
     
-    def calculate_score(sim_matrix):
+    def calculate_score(self, sim_matrix):
         nx_graph = nx.from_numpy_array(sim_matrix)
         scores = nx.pagerank(nx_graph)
         return scores
     
-    def ranked_sentences(sentences, scores, n=3):
+    def ranked_sentences(self, sentences, scores, n=3):
         top_scores = sorted(((scores[i],s) for i,s in enumerate(sentences)), reverse=True)
         top_n_sentences = [sentence for score,sentence in top_scores[:n]]
         return " ".join(top_n_sentences)
         
-    def generate(self, text, input_size=1024, deep=False):
+    def generate(self, text, deep=False):
         result = ""
         
         loop = 1
@@ -287,24 +289,26 @@ class Summarizer_with_textrank:
             sentence_vectors = [self.calculate_sentence_vector(sentence) for sentence in sentences]
             matrixs = self.similarity_matrix(sentence_vectors)
             scores = self.calculate_score(matrixs)
-            result = self.ranked_sentences(sentences, scores, n=3)
+            result = self.ranked_sentences(sentences, scores, n=2)
         
         return result
+
+    def generate(self, text, input_size=1024, deep=False):
+        return self.generate(text, deep=deep)
         
-    
-    
-    
 
 class Converter:
     def __init__(self):
         # initialize translater instance
         self.translater = Translater_with_googletrans()
-        print("Log: translater loaded successfully")       
+        print("=" * 50)
+        print("Log: translater 초기화 성공")       
 
         # initialize summarizer instance
         # self.summarizer = Summarizer_with_KoBart('digit82/kobart-summarization')
         self.summarizer = Summarizer_with_textrank()
-        print("Log: summarizor loaded successfully")
+        print("Log: summarizor 초기화 성공")
+        print("=" * 50, end="\n\n")
 
     def translate(self, text, input_size=5000):
         """
