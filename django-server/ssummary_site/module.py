@@ -19,11 +19,12 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import networkx as nx
 
+from hanspell import spell_checker
+
 
 def to_sentences(text):
-    text = text.replace("\n", "")
-    sentences = " ".join(text.split()).split(".")
-    sentences = [s for s in sentences if s != ""]
+    text = text.replace("\n", " ")
+    sentences = [s + '.' for s in text.split(".") if s != ""]
     return sentences
 
 def divide(text, input_size=5000):
@@ -37,7 +38,7 @@ def divide(text, input_size=5000):
     # short input_size if asian
     lang = detect(text)
     if lang in ['ko', 'ja', 'zh-cn', 'zh-tw', 'zh-hk']:
-        input_size = 1300
+        input_size = min(input_size, 1300)
 
     # divide text by words
     text = to_sentences(text)
@@ -47,7 +48,7 @@ def divide(text, input_size=5000):
         if len(temp + word) >= input_size:
             result.append(temp)
             temp = ""
-        temp += word + " "
+        temp += word
     result.append(temp)
     return result
 
@@ -152,6 +153,7 @@ class Translater_with_googletrans:
             result += self.translator.translate(dump, dest='ko').text
         return result
 
+
 class Summarizer_with_Cralwing:
     def __init__(self):
         self.url = "https://summariz3.herokuapp.com"
@@ -207,6 +209,61 @@ class Summarizer_with_Cralwing:
     def generate(self, text, input_size=1024, deep=False):
         return self.generate(text)
 
+class Summarizer_with_textrank:
+    # 추출 요약 기반 텍스트 랭크
+    def __init__(self):
+        fasttext.FastText.eprint = lambda x: None
+        self.ft = fasttext.load_model('models/cc.ko.300.bin')
+        
+    def similarity_matrix(self, sentence_embedding):
+        embedding_dim = 300
+        sim_mat = np.zeros([len(sentence_embedding), len(sentence_embedding)])
+        for i in range(len(sentence_embedding)):
+            for j in range(len(sentence_embedding)):
+                sim_mat[i][j] = cosine_similarity(sentence_embedding[i].reshape(1, embedding_dim),
+                                            sentence_embedding[j].reshape(1, embedding_dim))[0,0]
+        return sim_mat    
+        
+    def calculate_sentence_vector(self, sentence):
+        embedding_dim = 300
+        zero_vector = np.zeros(embedding_dim)
+        if len(sentence) == 0:
+            return zero_vector
+        return sum([self.ft.get_word_vector(word) for word in sentence])/len(sentence)
+    
+    def calculate_score(self, sim_matrix):
+        nx_graph = nx.from_numpy_array(sim_matrix)
+        scores = nx.pagerank(nx_graph)
+        return scores
+    
+    def ranked_sentences(self, sentences, scores, n=3):
+        top_scores = sorted(((scores[i],s) for i,s in enumerate(sentences)), reverse=True)
+        top_n_sentences = [sentence for score,sentence in top_scores[:n]]
+        return "".join(top_n_sentences)
+        
+    def generate(self, text, input_size=1024, deep=False):
+        result = ""
+        
+        loop = 1
+        if deep == True:
+            loop = 0
+            size = len(text)
+            while size // 100 > 0:
+                size =  size // 100
+                loop += 1
+        
+        for _ in range(loop):
+            if result:
+                text = result
+            sentences = [s + '.' for s in text.split('.')]
+            
+            sentence_vectors = [self.calculate_sentence_vector(sentence) for sentence in sentences]
+            matrixs = self.similarity_matrix(sentence_vectors)
+            scores = self.calculate_score(matrixs)
+            result += self.ranked_sentences(sentences, scores, n=2)
+        
+        return result
+        
 class Summarizer_with_KoBart:
     def __init__(self, model_name):
         self.tokenizer = PreTrainedTokenizerFast.from_pretrained(model_name)
@@ -238,39 +295,15 @@ class Summarizer_with_KoBart:
                 result += self.tokenizer.decode(summary_ids.squeeze().tolist(), skip_special_tokens=True)
         return result
 
-class Summarizer_with_textrank:
-    # 추출 요약 기반 텍스트 랭크
-    def __init__(self):
-        fasttext.FastText.eprint = lambda x: None
-        self.ft = fasttext.load_model('models/cc.ko.300.bin')
+class Summarizer_with_Bart_r3f:
+    def __init__(self, model_name):
+        self.tokenizer = PreTrainedTokenizerFast.from_pretrained(model_name)
+        self.model     = BartForConditionalGeneration.from_pretrained(model_name)
         
-    def similarity_matrix(self, sentence_embedding):
-        embedding_dim = 300
-        sim_mat = np.zeros([len(sentence_embedding), len(sentence_embedding)])
-        for i in range(len(sentence_embedding)):
-            for j in range(len(sentence_embedding)):
-                sim_mat[i][j] = cosine_similarity(sentence_embedding[i].reshape(1, embedding_dim),
-                                            sentence_embedding[j].reshape(1, embedding_dim))[0,0]
-        return sim_mat    
-        
-    def calculate_sentence_vector(self, sentence):
-        embedding_dim = 300
-        zero_vector = np.zeros(embedding_dim)
-        if len(sentence) == 0:
-            return zero_vector
-        return sum([self.ft.get_word_vector(word) for word in sentence])/len(sentence)
-    
-    def calculate_score(self, sim_matrix):
-        nx_graph = nx.from_numpy_array(sim_matrix)
-        scores = nx.pagerank(nx_graph)
-        return scores
-    
-    def ranked_sentences(self, sentences, scores, n=3):
-        top_scores = sorted(((scores[i],s) for i,s in enumerate(sentences)), reverse=True)
-        top_n_sentences = [sentence for score,sentence in top_scores[:n]]
-        return " ".join(top_n_sentences)
-        
-    def generate(self, text, deep=False):
+    def generate(self, text, input_size=512, deep=False):
+        if input_size > 512:
+            raise ValueError("input_size must be less than 512")
+
         result = ""
         
         loop = 1
@@ -284,18 +317,25 @@ class Summarizer_with_textrank:
         for _ in range(loop):
             if result:
                 text = result
-            sentences = text.split('.')
             
-            sentence_vectors = [self.calculate_sentence_vector(sentence) for sentence in sentences]
-            matrixs = self.similarity_matrix(sentence_vectors)
-            scores = self.calculate_score(matrixs)
-            result = self.ranked_sentences(sentences, scores, n=2)
-        
+            for i in range(0, len(text), input_size):
+                dump = text[i:i+input_size]
+                dump = " ".join(dump.split()).split(".")
+                dump = [s for s in dump if s != ""]
+
+                raw_input_ids = self.tokenizer("[BOS]" + "[SEP]".join(dump) + "[EOS]", return_tensors="pt")
+
+                outputs = self.model.generate(
+                    raw_input_ids.input_ids,
+                    attention_mask=raw_input_ids.attention_mask,
+                    num_beams=5,
+                    length_penalty=1.2,
+                    max_length=512,
+                    use_cache=True,
+                )
+                result += self.tokenizer.decode(outputs[0], skip_special_tokens=True)
         return result
 
-    def generate(self, text, input_size=1024, deep=False):
-        return self.generate(text, deep=deep)
-        
 
 class Converter:
     def __init__(self):
@@ -306,6 +346,7 @@ class Converter:
 
         # initialize summarizer instance
         # self.summarizer = Summarizer_with_KoBart('digit82/kobart-summarization')
+        # self.summarizer = Summarizer_with_Bart_r3f('alaggung/bart-r3f')
         self.summarizer = Summarizer_with_textrank()
         print("Log: summarizor 초기화 성공")
         print("=" * 50, end="\n\n")
@@ -319,6 +360,22 @@ class Converter:
             input_size (int): Size of each chunk
         """
         return self.translater.translate(text, input_size=input_size)
+
+    def spell_check(self, text, input_size=500):
+        """
+        Check the spelling of the text.
+
+        Args:
+            text (str): Text to be checked
+            input_size (int): Size of each chunk
+        """
+
+        result = ""
+        dumps = divide(text, input_size=input_size)
+
+        for dump in dumps:
+            result += spell_checker.check(dump).checked
+        return result
 
     def summarize(self, text, input_size=1024, deep=False):
         """
