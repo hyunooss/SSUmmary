@@ -18,6 +18,7 @@ iframe.scrolling = 'no';
 iframe.style.display = 'none';
 iframe.style.width = '300px';
 iframe.style.height = '180px';
+iframe.style.boxShadow = 'rgb(150 150 150) 4px 4px 4px 0px';
 document.body.appendChild(iframe);
 
 
