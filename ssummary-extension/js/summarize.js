@@ -18,7 +18,7 @@ function summarize_fn(text, deep) {
             },
             error: function(xhr, status, error){
                 console.log(error);
-                reject(error);
+                resolve(error);
             }
         });
     });
