@@ -4,9 +4,13 @@ var myInterval;
 
 function preprocess_text(text) {
     let ret = "";
-    text.split('\n').forEach(function (line) {
-        if (line.length > 50) { ret += line; }
+    let textList = text.split('\n');
+
+    textList.forEach(function (line) {
+        line += ".";
+        if (line.length > 50) { ret += " " + line; }
     });
+    
     ret = ret.replaceAll('。', '.');
     ret = ret.replaceAll('、', '.');
     return ret;
