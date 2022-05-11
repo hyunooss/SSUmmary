@@ -13,7 +13,10 @@ var iframe = document.createElement('iframe');
 iframe.id = 'ssummary_iframe';
 iframe.src = chrome.runtime.getURL('html/iframe.html');
 iframe.scrolling = 'no';
+// css
 iframe.style.display = 'none';
+iframe.style.width = '300px';
+iframe.style.height = '180px';
 document.body.appendChild(iframe);
 
 
