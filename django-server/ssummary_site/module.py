@@ -246,27 +246,15 @@ class Summarizer_with_textrank:
         return "".join(top_n_sentences)
         
     def generate(self, text, input_size=1024, deep=False):
-        result = ""
+        n = 2 if deep else 4
         
-        loop = 1
-        if deep == True:
-            loop = 0
-            size = len(text)
-            while size // 100 > 0:
-                size =  size // 100
-                loop += 1
+        sentences = [s + '.' for s in text.split('.')]
         
-        for _ in range(loop):
-            if result:
-                text = result
-            sentences = [s + '.' for s in text.split('.')]
-            
-            sentence_vectors = [self.calculate_sentence_vector(sentence) for sentence in sentences]
-            matrixs = self.similarity_matrix(sentence_vectors)
-            scores = self.calculate_score(matrixs)
-            result += self.ranked_sentences(sentences, scores, n=2)
+        sentence_vectors = [self.calculate_sentence_vector(sentence) for sentence in sentences]
+        matrixs = self.similarity_matrix(sentence_vectors)
+        scores = self.calculate_score(matrixs)
         
-        return result
+        return self.ranked_sentences(sentences, scores, n)
         
 class Summarizer_with_KoBart:
     def __init__(self, model_name):
