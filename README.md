@@ -12,7 +12,8 @@
   > pip install django django-cors-headers selenium webdriver_manager
 
 ## Architecture
-<img src="https://user-images.githubusercontent.com/62216628/154456823-c341f5a9-5be8-4321-8d60-bf0b253eea40.png" width="70%" align="center">
+<img src="https://user-images.githubusercontent.com/62216628/167875676-19ceea8b-35c8-4ca9-aca4-773dbfbc6408.png" width="70%" align="center">
+
 
 ## Reference
 + <a href="https://www.flaticon.com/free-icon/bot_4712139#" title="bot icons">Bot icons created by Smashicons - Flaticon</a>
