@@ -3,6 +3,7 @@ var button = document.createElement('div');
 button.id = 'floating_button';
 button.classList.add('small');
 button.classList.add('normal');
+// if this window is a popup, no need to add button
 if (!opener) {
     document.body.appendChild(button);
 }
@@ -96,7 +97,7 @@ window.onclick = function(event) {
 };
 
 
-// get on_off from storage
+//-----get on_off from storage-----//
 chrome.storage.sync.get(function (data) {
     document.getElementById('floating_button').style.display = data.on_off ? 'block' : 'none';
 });
