@@ -147,6 +147,10 @@ class Translater_with_googletrans:
         self.translator = Translator()
 
     def translate(self, text, input_size=5000):
+        # do not translate if text is Korean.
+        if detect(text) == 'ko':
+            return text
+
         result = ""
         dumps = divide(text, input_size=input_size)
         for dump in dumps:
