@@ -5,7 +5,7 @@ body { margin: 5px; }
 .menu button { width: 100%; }
 #result_textarea { 
     resize: none; 
-    width: 97%; 
+    width: 284px; 
     height: 120px;
 }
 #progress_bar {
