@@ -1,13 +1,17 @@
 body { margin: 5px; }
-.menu { width: 240px; }
+.menu { 
+    width: 290px; 
+}
 .menu button { width: 100%; }
 #result_textarea { 
     resize: none; 
     width: 97%; 
-    height: 100px;
+    height: 120px;
 }
 #progress_bar {
     position: relative;
     width: 100%;
     height: 30px;
+    margin-top: -6px;
 }
+
