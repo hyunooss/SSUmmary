@@ -13,22 +13,7 @@ function preprocess_text(text) {
 };
 
 function progress_bar_fn(leng) {
-    let time = 20;
-    if (leng > 5000) {
-        time = 50;
-    }
-    else if (leng > 4000) {
-        time = 40;
-    }
-    else if (leng > 3000) {
-        time = 30;
-    }
-
-    if (!time) {
-        document.getElementById('result_textarea').innerText = 'Error';
-        return;
-    }
-
+    let time = 5;
     document.getElementById('result_textarea').innerText = "요약중...";
     document.getElementById("progress_bar").max = time;
 
@@ -36,10 +21,10 @@ function progress_bar_fn(leng) {
     function myTimer() {
         document.getElementById("progress_bar").value = cur;
         if (cur < document.getElementById("progress_bar").max-0.5) {
-            cur += 0.1;
+            cur += 0.01;
         }
     }
-    myInterval = setInterval(myTimer, 100);
+    myInterval = setInterval(myTimer, 10);
 }
 
 async function result_textarea_fn(text, deep) {
