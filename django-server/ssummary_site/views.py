@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from . import module
+
+from .modules.Converters import MyConverter
 
 # initialize converter instance
-converter = module.Converter()
+converter = MyConverter()
 
 #--- Function-based View
 def ssummary(request):
