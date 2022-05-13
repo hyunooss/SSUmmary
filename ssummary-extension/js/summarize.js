@@ -5,7 +5,7 @@ function summarize_fn(text, deep) {
         $.ajax({
             type: 'POST',
             url: ssummary_url,
-            data: { 'content': text, 'deep': deep},
+            data: { 'content': text, 'deep': deep, 'target_lang': 'ko' },
             Headers: {
                 'Access-Control-Allow-Origin': '*',
             },
