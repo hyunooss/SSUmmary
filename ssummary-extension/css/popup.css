@@ -101,14 +101,16 @@ body {
     font-size: 15px;
     display: inline;
 }
-.option_name {
+.switch_option {
     position: relative;
     display: inline-block;
     top: -10px;
     width: 50px;
-    font-size: 16px;
+}
+.option_name {
     vertical-align: middle;
     text-align: left;
+    font-size: 16px;
 }
 #main {
     display: inline;
