@@ -31,8 +31,8 @@ function progress_bar_fn(leng) {
     myInterval = setInterval(myTimer, 10);
 }
 
-async function result_textarea_fn(text, deep) {
-    var result = await summarize_fn(text, deep);
+async function result_textarea_fn(text, deep, target_lang) {
+    var result = await summarize_fn(text, deep, target_lang);
     document.getElementById('result_textarea').innerText = await result;
 
     // stop progress bar
@@ -70,8 +70,9 @@ function bnt1_fn() {
         // summarize
         chrome.storage.sync.get(function (data) {
             const deep = data.deep ? true : false;
-            
-            result_textarea_fn(preprocessed_text, deep);
+            const target_lang = data.target_lang ? data.target_lang : 'ko';
+
+            result_textarea_fn(preprocessed_text, deep, target_lang);
         });
     }); 
 };

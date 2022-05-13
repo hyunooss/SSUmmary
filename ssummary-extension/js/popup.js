@@ -22,10 +22,18 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.sync.set({'deep': on_off});
     };
 
-    // get on_off from storage
+    document.querySelector('#select_lang').onchange = function (event) {
+        const target_lang = event.target.value;
+
+        // set target_lang to storage
+        chrome.storage.sync.set({'target_lang': target_lang});
+    };
+
+    // get datas from storage
     chrome.storage.sync.get(function (data) {
         document.querySelector('#switch').checked = data.on_off;
         document.querySelector('#switch2').checked = data.deep;
         document.querySelector('#Floating_ONOFF').innerHTML = data.on_off ? "<b>ON</b>" : "<b>OFF</b>";
+        document.querySelector('#select_lang').value = data.target_lang;
     });
 });
