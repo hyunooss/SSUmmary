@@ -34,6 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('#switch').checked = data.on_off;
         document.querySelector('#switch2').checked = data.deep;
         document.querySelector('#Floating_ONOFF').innerHTML = data.on_off ? "<b>ON</b>" : "<b>OFF</b>";
-        document.querySelector('#select_lang').value = data.target_lang;
+        document.querySelector('#select_lang').value = data.target_lang ? data.target_lang : 'ko';
     });
 });
