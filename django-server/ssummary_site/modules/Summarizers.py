@@ -1,3 +1,5 @@
+from .Cralwers import *
+
 import fasttext.util
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -7,6 +9,63 @@ import torch
 from transformers import PreTrainedTokenizerFast
 from transformers import BartForConditionalGeneration
 
+from .utils import *
+
+
+class Summarizer_with_Cralwing:
+    def __init__(self):
+        self.url = "https://summariz3.herokuapp.com"
+        self.browser = MyCralwer().browser
+
+    def generate(self, text):
+        # text to sentence
+        sentences = to_sentences(text)
+
+        # summarize each sentence
+        result, dumps = "", ""
+        for i in range(len(sentences)):
+            dumps += sentences[i] + "."
+
+            # do 40 sentences each 
+            if (i+1) % 40 == 0 or i == len(sentences)-1:
+                # retry 3 times
+                for trial in range(3):
+                    try:
+                        self.browser.get(url)
+                        
+                        # '요약하고 싶은 텍스트' 입력
+                        textArea = WebDriverWait(self.browser, 30).until(
+                            EC.presence_of_element_located((By.XPATH, '//*[@id="input-3"]'))
+                        )
+                        self.browser.execute_script("""
+                            var elm = arguments[0]; 
+                            elm.value = arguments[1]; 
+                            elm.dispatchEvent(new Event('change'));
+                            """, textArea, dumps)
+                        
+                        # '요약하기' 버튼
+                        btn = WebDriverWait(self.browser, 30).until(
+                            EC.presence_of_element_located((By.XPATH, '//*[@id="container"]/form/div[2]/button'))
+                        )
+                        btn.click()
+                        
+                        # '요약 결과'
+                        result += WebDriverWait(self.browser, 60).until(
+                            EC.presence_of_element_located((By.XPATH, '//*[@id="container"]/div[2]/div[2]'))
+                        ).text
+
+                        # clean dumps
+                        dumps = ""
+                    except Exception as e:
+                        if trial == 2:
+                            print(f"{len(dumps)} \n{dumps}")
+                            raise e
+                    else:
+                        break
+        return result
+
+    def generate(self, text, input_size=1024, deep=False):
+        return self.generate(text)
 
 class Summarizer_with_textrank:
     # 추출 요약 기반 텍스트 랭크

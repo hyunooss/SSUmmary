@@ -1,6 +1,5 @@
 from .Translaters import *
 from .Summarizers import *
-from .Cralwers import *
 
 from hanspell import spell_checker
 
@@ -19,15 +18,16 @@ class MyConverter:
         print("Log: summarizor 초기화 성공")
         print("=" * 50, end="\n\n")
 
-    def translate(self, text, input_size=5000):
+    def translate(self, text, target, input_size=5000):
         """
         Translate the text into Korean by dividing it into chunks.
 
         Args:
             text (str): Text to be translated
+            target (str): Target language
             input_size (int): Size of each chunk
         """
-        return self.translater.translate(text, input_size=input_size)
+        return self.translater.translate(text, target, input_size=input_size)
 
     def spell_check(self, text, input_size=500):
         """
