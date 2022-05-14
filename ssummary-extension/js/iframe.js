@@ -18,7 +18,6 @@ function preprocess_text(text) {
 
 function progress_bar_fn(leng) {
     let time = 5;
-    document.getElementById('result_textarea').innerText = "요약중...";
     document.getElementById("progress_bar").max = time;
 
     var cur = 0;
@@ -59,7 +58,7 @@ function bnt1_fn() {
             document.getElementById('result_textarea').innerText = 'Error';
             return;
         }
-        document.getElementById('result_textarea').innerText = "요약중...";
+        document.getElementById('result_textarea').innerText = "Wait...";
         document.getElementById('btn1').disabled = true;
 
         let preprocessed_text = preprocess_text(text[0]);
