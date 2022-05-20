@@ -19,6 +19,7 @@ function summarize_fn(text, deep, target_lang) {
                 resolve(data);
             },
             error: function(xhr, status, error){
+                if (error == "") error = "server cannot connect";
                 console.log(error);
                 resolve(error);
             }
