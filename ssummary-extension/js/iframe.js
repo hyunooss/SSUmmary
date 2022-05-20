@@ -12,7 +12,7 @@ function preprocess_text(text) {
     });
     
     ret = ret.replaceAll('。', '.');
-    ret = ret.replaceAll('、', '.');
+    ret = ret.replaceAll('、', ',');
     return ret;
 };
 
