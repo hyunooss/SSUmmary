@@ -100,7 +100,7 @@ class Summarizer_with_textrank:
         return "".join(top_n_sentences)
         
     def generate(self, text, input_size=1024, deep=False):
-        n = 2 if deep else 4
+        n = 1 if deep else 3
         
         sentences = [s + '.' for s in text.split('.')]
         
