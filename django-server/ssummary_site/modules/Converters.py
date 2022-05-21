@@ -8,6 +8,7 @@ class MyConverter:
     def __init__(self):
         # initialize translater instance
         self.translater = Translater_with_googletrans()
+        # self.translater = Translater_with_papago_api()
         print("=" * 50)
         print("Log: translater 초기화 성공")       
 
