@@ -12,7 +12,7 @@ class Translater_with_Cralwing:
     def __init__(self):
         self.browser = MyCralwer().browser
 
-    def translate(self, text, target):
+    def translate(self, text, target, input_size=5000):
         url = f"https://papago.naver.com/?sk=auto&tk={target}&st="
 
         # preprocessing
@@ -53,15 +53,12 @@ class Translater_with_Cralwing:
                         break
         return result
 
-    def translate(self, text, target, input_size=5000):
-        return self.translate(text, target)
-
 class Translater_with_papago_api:
     def __init__(self):
         self.client_id = "ACTEz0YaXKIVplDTV2lE"
         self.client_secret = "PnDLJZHsZl"
 
-    def translate(self, text, target):
+    def translate(self, text, target, input_size=5000):
         result = None
 
         lang = detect(text)
@@ -82,9 +79,6 @@ class Translater_with_papago_api:
             result = "Error Code:" + rescode
 
         return result
-
-    def translate(self, text, target, input_size=5000):
-        return self.translate(text, target)
 
 class Translater_with_googletrans:
     def __init__(self):
