@@ -69,7 +69,14 @@ class Translater_with_papago_api:
         request = urllib.request.Request(url)
         request.add_header("X-Naver-Client-Id", self.client_id)
         request.add_header("X-Naver-Client-Secret", self.client_secret)
-        response = urllib.request.urlopen(request, data=data.encode("utf-8"))
+        
+        try:
+            response = urllib.request.urlopen(request, data=data.encode("utf-8"))
+        except Exception as e:
+            print("ERROR from Translater_with_papago_api.translate(): \n" +
+                   "data: "+ data)
+            raise e
+
         
         rescode = response.getcode()
         if rescode == 200:
@@ -92,5 +99,9 @@ class Translater_with_googletrans:
         result = ""
         dumps = divide(text, input_size=input_size)
         for dump in dumps:
-            result += self.translator.translate(dump, dest=target).text
+            try:
+                result += self.translator.translate(dump, dest=target).text
+            except Exception as e:
+                print("ERROR from spell_check(): \n" + e)
+                raise e
         return result
