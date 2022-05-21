@@ -6,7 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const on_off = event.target.checked;
         // on/off floating_button
         chrome.tabs.executeScript({
-            code: "document.getElementById('floating_button').style.display = '" + (on_off ? 'block' : 'none') + "';"
+            code: 
+            `
+            document.getElementById('floating_button').style.display = '${(on_off ? 'block' : 'none')}';
+            if (document.getElementById('ssummary_iframe').style.display == 'block') 
+                document.getElementById('ssummary_iframe').style.display = 'none';
+            ` 
         });
         
         document.querySelector('#Floating_ONOFF').innerHTML = on_off ? "<b>ON</b>" : "<b>OFF</b>";
