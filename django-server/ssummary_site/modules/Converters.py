@@ -7,8 +7,8 @@ from hanspell import spell_checker
 class MyConverter:
     def __init__(self):
         # initialize translater instance
-        self.translater = Translater_with_googletrans()
         # self.translater = Translater_with_papago_api()
+        self.translater = Translater_with_googletrans()
         print("=" * 50)
         print("Log: translater 초기화 성공")       
 
@@ -43,7 +43,11 @@ class MyConverter:
         dumps = divide(text, input_size=input_size)
 
         for dump in dumps:
-            result += spell_checker.check(dump).checked
+            try:
+                result += spell_checker.check(dump).checked
+            except Exception as e:
+                    print("ERROR from spell_check(): \n" + dump)
+                    raise e
         return result
 
     def summarize(self, text, input_size=1024, deep=False):
