@@ -12,9 +12,3 @@
 
 ## Architecture
 <img src="https://user-images.githubusercontent.com/62216628/167875676-19ceea8b-35c8-4ca9-aca4-773dbfbc6408.png" width="70%" align="center">
-
-
-## Reference
-+ <a href="https://www.flaticon.com/free-icon/bot_4712139#" title="bot icons">Bot icons created by Smashicons - Flaticon</a>
-+ <a href="https://www.flaticon.com/free-icon/bot_4712189#" title="bot icons">Bot icons created by Smashicons - Flaticon</a>
-+ <a href="https://www.flaticon.com/free-icon/bot_4712184#" title="bot icons">Bot icons created by Smashicons - Flaticon</a>
