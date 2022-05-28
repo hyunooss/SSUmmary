@@ -14,7 +14,7 @@
  
     pip install langdetect==1.0.9
  
-    pip install py-hanspell==1.1
+    pip install git+https://github.com/ssut/py-hanspell.git
   
     pip install googletrans==4.0.0rc1
 
@@ -24,7 +24,7 @@
 
     pip install urllib3==1.26.8
 
-    pip install scikit-learn=0.24.2
+    pip install scikit-learn==0.24.2
     
     pip install torch==1.10.2 torchvision==0.11.3 torchaudio==0.10.2
     
