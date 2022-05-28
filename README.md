@@ -8,28 +8,7 @@
 <img src="https://user-images.githubusercontent.com/62216628/155366152-e27887f4-dada-4dea-a1ca-ae547cf62600.PNG" width="45%"> <img src="https://user-images.githubusercontent.com/62216628/155366160-bc47cee1-85ac-447a-a628-9a8d8cbdfef9.PNG" width="45%"> <img src="https://user-images.githubusercontent.com/62216628/155366166-e0f6fcd5-eaeb-40a8-a074-90ecc2142a7f.PNG" width="45%"> <img src="https://user-images.githubusercontent.com/62216628/155366179-13024b9f-6694-44f2-b1ac-107d30b0cc28.PNG" width="45%">
 
 ## Dependency
-+ **django-server**
-```
-    pip install django==3.2.12 django-cors-headers==3.10.1 selenium==3.141.0 webdriver_manager==3.5.3
- 
-    pip install langdetect==1.0.9
- 
-    pip install git+https://github.com/ssut/py-hanspell.git
-  
-    pip install googletrans==4.0.0rc1
-
-    pip install fasttext==0.9.2
-
-    pip install networkx==2.5.1
-
-    pip install urllib3==1.26.8
-
-    pip install scikit-learn==0.24.2
-    
-    pip install torch==1.10.2 torchvision==0.11.3 torchaudio==0.10.2
-    
-    pip install transformers==4.11.3
-```
++ [django-server](https://github.com/20170375/SSUmmary/blob/main/dependency.md)
 
 ## Architecture
 <img src="https://user-images.githubusercontent.com/62216628/167875676-19ceea8b-35c8-4ca9-aca4-773dbfbc6408.png" width="70%" align="center">
