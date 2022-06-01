@@ -1,5 +1,6 @@
 from .Cralwers import *
 
+import config
 import urllib.request
 
 from langdetect import detect
@@ -55,8 +56,8 @@ class Translater_with_Cralwing:
 
 class Translater_with_papago_api:
     def __init__(self):
-        self.client_id = "ACTEz0YaXKIVplDTV2lE"
-        self.client_secret = "PnDLJZHsZl"
+        self.client_id = config.papago_api['client_id']
+        self.client_secret = config.papago_api['client_secret']
 
     def translate(self, text, target, input_size=5000):
         result = None
